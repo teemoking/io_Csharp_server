@@ -1,0 +1,25 @@
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.exe.config
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.exe.manifest
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.application
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.exe
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.pdb
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.MainForm.resources
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.Properties.Resources.resources
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.csproj.GenerateResource.Cache
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.exe.manifest
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.application
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.exe
+D:\360WangPan\vs\lianxi\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.pdb
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.exe.config
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.exe.manifest
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.application
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.exe
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\bin\Release\WindowsFormsApplication2.pdb
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.MainForm.resources
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.Properties.Resources.resources
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.csproj.GenerateResource.cache
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.TrustInfo.xml
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.exe.manifest
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.application
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.exe
+D:\visual studio program\io_tcp_csharp_191013\WindowsFormsApplication2\obj\Release\WindowsFormsApplication2.pdb
