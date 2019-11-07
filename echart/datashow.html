@@ -1,0 +1,399 @@
+<!doctype html>
+<html >
+ <head>
+  <meta charset="UTF-8">
+    <script src="js/echarts.min.js"></script>
+	    <script>    
+        function linebarsetOption(option,capacity,datelength,xdata,xformatter,caculatefunction,dataarr)
+        {
+            var dayoption = option;
+            dayoption.xAxis[0].data = xdata;
+            dayoption.xAxis[0].axisLabel.formatter = xformatter;
+
+            for(var i=0,j=0; i<dayoption.series.length; i+=3,++j)
+            {
+                dayoption.series[i].data = dataarr[j];
+                dayoption.series[i+1].data = dataarr[j];             
+            }
+            return caculatefunction(dayoption,datelength,capacity);
+        } 
+        function datadisplay(buttonName)
+        {
+            var quarterdiv = document.getElementById("quarterlinebar");
+            var monthdiv = document.getElementById("monthlinebar");
+            var daydiv = document.getElementById("daylinebar");
+            var divarr = [quarterdiv,monthdiv,daydiv];
+        
+            for(var i=0; i<divarr.length;i++)
+            {
+                if(divarr[i].id===buttonName)
+                {
+                    divarr[i].style.display="block";
+                }
+                else
+                {
+                    divarr[i].style.display="none";
+                }
+            }
+        }
+        function piecaculate(option,datelength,capacity)
+        {
+            for(var i=0,j=0; i<option.series.length; i+=3,++j)
+            {   
+                if(option.series[i] != undefined)
+                {
+                    var data = option.series[i].data;
+                    var polutiondata = caculate(data);
+                    if(option.series[i+2] != undefined)
+                    {
+                        if((capacity[j]-polutiondata) >= 0)
+                            option.series[i+2].data = [
+                                {value:(capacity[j]-polutiondata).toFixed(3),name:datelength+'剩余排放量',itemStyle:{color:'#6C5850'}},
+                                {value:polutiondata,name:datelength+'已排放量',itemStyle:{color:'#C4CCD3'}},
+                            ];
+                            else
+                            option.series[i+2].data = [
+                                {value:0,name:datelength+'剩余排放量',itemStyle:{color:'#6C5850'}},
+                                {value:polutiondata,name:datelength+'已排放量',itemStyle:{color:'#C4CCD3'}},
+                            ];
+                    }
+                }
+            } 
+            return option;
+        }
+        function caculate(polutiondata)
+        {
+            var total = 0;
+            for(var i=0;i<polutiondata.length;++i)
+            {
+                total+=polutiondata[i];
+            }
+            return total;
+        }
+        function capacitycaculate(data,divisor)
+        {
+            for(var i=0; i<data.length;++i)
+            {
+                data[i] = (data[i]/divisor);
+            }
+            return data;
+        }
+    </script>
+    <style  type="text/css">
+		.button {
+			background-color: #4CAF50; /* Green */
+			border:none;
+			color: white;
+			height:26px;
+			width:52px;
+			text-align: center;
+			margin: 80px 2px;
+			display:flex;
+			justify-content:center;
+			border-radius: 8px;
+		}
+		#monthlinebar,#quarterlinebar,#daylinebar{
+			position: absolute;
+			left:0px;
+			top:0px;
+		}
+    </style>
+  <title>外高桥发电厂数据展示</title>
+ </head>
+ <body>
+    <div id="datashow" style="height:460px;width: 700px;display: inline-block;">
+        <div id="linebar" style="height:460px;width: 600px;float: left;">
+            <div id="daylinebar" style="height:460px;width: 600px;float: left;"></div>
+            <!-- <div id="monthlinebar" style="height:460px;width: 600px;display:none">monthlinebar</div> -->
+            <div id="monthlinebar" style="height:460px;width: 600px;float: left;display: none;"></div>
+            <div id="quarterlinebar" style="height:460px;width: 600px;float: left;display: none;"></div>
+        </div>
+        <div id="button" style="height:460px;width: 100px;float: left;">
+            <button class="button" id="daydata" onclick="datadisplay('daylinebar')">日数据</button>
+            <button class="button" id="monthdata" onclick="datadisplay('monthlinebar')" >月数据</button>
+            <button class="button" id="quarterdata" onclick="datadisplay('quarterlinebar')">季数据</button>
+        </div> 
+    </div>
+ </body>
+    <script>
+        var daylinebarchart = echarts.init(document.getElementById('daylinebar'));
+        var monthlinebarchart = echarts.init(document.getElementById('monthlinebar'));
+        var quarterlinebarchart = echarts.init(document.getElementById('quarterlinebar'));
+        
+        var linebaroption = {
+            title:{
+                title:'污染源数据展示',
+                subtitle:'外高桥发电厂',
+                x:'center'
+            },
+            tooltip:{
+                trigger:'item',
+                formatter:'{a}</br>'+
+                '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#0f4554"></span>时间 : {b} </br>' +
+                '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c23531"></span>排放量 : {c} ml',
+            },
+            legend:{
+                selectedMode:'single',
+                x:'center',
+                data:['CODcr','氨氮','烟尘颗粒物','SO2','NOx'],
+            },
+            xAxis:[
+                {
+                    type:'category',
+                    axisLabel:{
+                        formatter:'{value} day'
+                    }
+                },
+            ],
+            yAxis:[
+                {
+                    type:'value',
+                    name:'排放量',
+                    //position:'right',
+                    axisLabel:{
+                        formatter:'{value} ml'
+                    }
+                }
+            ],
+            dataZoom:[
+                {
+                    type:'inside'
+                }
+            ],
+            series:[
+                {
+                    name:'CODcr',
+                    type:'bar',
+                },
+                {
+                    name:'CODcr',
+                    type:'line',
+                    itemStyle:{
+                        normal:{
+                            color:'#0f4554',
+                        }
+                    },
+                },
+                {
+                    name:'CODcr',
+                    type:'pie',
+                    tooltip:{
+                        trigger:'item',
+                        formatter:'{a} <br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#0f4554"></span>{b} : {c} ml<br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c23531"></span>占比 : {d} %',
+                    },
+                    center:[465,80],
+                    radius:[22,40],   
+                    label:{
+                        normal: {
+                         show: false,
+                         position: 'left'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '12',
+                                color:'black'
+                            }
+                        }
+                    }
+                },
+                {
+                    name:'氨氮',
+                    type:'bar'
+                },
+                {
+                    name:'氨氮',
+                    type:'line',
+                    itemStyle:{
+                        normal:{
+                            color:'#95294D',
+                        }
+                    },
+                },
+                {
+                    name:'氨氮',
+                    type:'pie',
+                    tooltip:{
+                        trigger:'item',
+                        formatter:'{a} <br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#0f4554"></span>{b} : {c} ml<br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c23531"></span>占比 : {d} %',
+                    },
+                    center:[465,80],
+                    radius:[22,40],
+                    label:{
+                        normal: {
+                         show: false,
+                         position: 'left'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '12',
+                                color:'black'
+                            }
+                        }
+                    }
+                },
+                {
+                    name:'烟尘颗粒物',
+                    type:'bar',
+                },
+                {
+                    name:'烟尘颗粒物',
+                    type:'line',
+                    itemStyle:{
+                        normal:{
+                            color:'#D48265',
+                        }
+                    },
+                },
+                {
+                    name:'烟尘颗粒物',
+                    type:'pie',
+                    tooltip:{
+                        trigger:'item',
+                        formatter:'{a} <br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#0f4554"></span>{b} : {c} ml<br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c23531"></span>占比 : {d} %',
+                    },
+                    center:[465,80],
+                    radius:[22,40],
+                    label:{
+                        normal: {
+                         show: false,
+                         position: 'left'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '12',
+                                color:'black'
+                            }
+                        }
+                    }
+                },
+                {
+                    name:'SO2',
+                    type:'bar',
+                    seriesLayoutBy: 'row',
+                },
+                {
+                    name:'SO2',
+                    type:'line',
+                    itemStyle:{
+                        normal:{
+                            color:'#61A0A8',
+                        }
+                    },
+                },
+                {
+                    name:'SO2',
+                    type:'pie',
+                    tooltip:{
+                        trigger:'item',
+                        formatter:'{a} <br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#0f4554"></span>{b} : {c} ml<br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c23531"></span>占比 : {d} %',
+                    },
+                    center:[465,80],
+                    radius:[22,40],
+                    label:{
+                        normal: {
+                         show: false,
+                         position: 'left'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '12',
+                                color:'black'
+                            }
+                        }
+                    }
+                },
+                {
+                    name:'NOx',
+                    type:'bar',
+                },
+                {
+                    name:'NOx',
+                    type:'line',
+                    itemStyle:{
+                        normal:{
+                            color:'#C23531',
+                        }
+                    },
+                },
+                {
+                    name:'NOx',
+                    type:'pie',
+                    tooltip:{
+                        trigger:'item',
+                        formatter:'{a} <br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#0f4554"></span>{b} : {c} ml<br>'+
+                        '<span style="display:inline-block;margin-right:5px;border-radius:10px;width:9px;height:9px;background-color:#c23531"></span>占比 : {d} %',
+                    },
+                    center:[465,80],
+                    radius:[22,40],
+                    label:{
+                        normal: {
+                         show: false,
+                         position: 'left'
+                        },
+                        emphasis: {
+                            show: true,
+                            textStyle: {
+                                fontSize: '12',
+                                color:'black'
+                            }
+                        }
+                    }
+                },
+            ]
+        };
+
+		//污染物年排放量
+        var capacity = [20000,10000,8000,9000,12000];
+		//日数据x轴
+        var dayxlabledata = ['1日','2日','3日','4日','5日','6日','7日','8日','9日','10日','11日','12日','13日','14日','15日','16日','17日','18日','19日','20日','21日','22日','23日','24日','25日','26日','27日','28日','29日','30日','31日'];
+		//日数据
+        var daydataset = [
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3, 2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3, 2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3, 2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3, 2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3, 2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+        ];
+        var dayoption = linebarsetOption(linebaroption,capacitycaculate(capacity,12),'月',dayxlabledata,'{value} day',piecaculate,daydataset);
+        daylinebarchart.setOption(dayoption,true); 
+
+		//月数据x轴
+        var monxlabledata = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+		//月数据
+        var mondataset = [
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+            [2.0,4.9,7.0,23.2, 25.6, 76.7, 135.6, 162.2, 32.6, 20.0, 6.4, 3.3],
+        ];
+        var monthoption = linebarsetOption(linebaroption,capacitycaculate(capacity,1),'年',monxlabledata,'{value} mon',piecaculate,mondataset);
+        monthlinebarchart.setOption(monthoption,true);
+
+		//季度数据x轴
+        var seaxlabledata = ['1季度','2季度','3季度','4季度'];
+		//季度数据
+        var seadataset = [
+            [2.0,4.9,7.0,23.2],
+            [2.0,4.9,7.0,23.2],
+            [2.0,4.9,7.0,23.23],
+            [2.0,4.9,7.0,23.2],
+            [2.0,4.9,7.0,23.2],
+        ];
+        var quarteroption = linebarsetOption(linebaroption,capacitycaculate(capacity,1),'年',seaxlabledata,'{value} season',piecaculate,seadataset);
+        quarterlinebarchart.setOption(quarteroption,true);  
+    </script>
+</html>
