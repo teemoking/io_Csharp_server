@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head lang="zh-CN">
+        <meta charset="UTF-8">
+        <title></title>
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
+        <style type="text/css">
+            *{margin:0px;padding: 0px;}
+            html,body{height:100%;width:100%;position: relative;overflow: hidden;}
+            .scrollBody{height: 160px;position: relative;overflow: hidden;}
+            .scrollBody>ul{list-style: none;position: absolute;height: 40px;width: 50%;top: 160px;left: 0px;}
+            .scrollBody>ul:nth-child(odd){background: #286dad;}
+            .scrollBody>ul:nth-child(even) {background: #1c97ad;}
+            .scrollBody>ul>li{height: 40px;width: 25%;float: left;text-align: center;line-height: 40px;}
+            .scrollBody>ul:nth-child(1){top: 0;}
+            .scrollBody>ul:nth-child(2){top: 40px;}
+            .scrollBody>ul:nth-child(3){top: 80px;}
+            .scrollBody>ul:nth-child(4){top: 120px;}
+        </style>
+    </head>
+    <body>
+        <div class="scrollBody">
+            <ul><li>A</li><li>a</li><li>A</li><li>a</li></ul>
+            <ul><li>B</li><li>b</li><li>A</li><li>a</li></ul>
+            <ul><li>C</li><li>c</li><li>A</li><li>a</li></ul>
+            <ul><li>D</li><li>d</li><li>A</li><li>a</li></ul>
+            <ul><li>E</li><li>e</li><li>A</li><li>a</li></ul>
+            <ul><li>F</li><li>f</li><li>A</li><li>a</li></ul>
+            <ul><li>G</li><li>g</li><li>A</li><li>a</li></ul>
+            <ul><li>H</li><li>h</li><li>A</li><li>a</li></ul>
+        </div>
+        <script>
+            function scroll(className){
+                var uls = $("."+className+">ul");
+				console.log(uls);
+                var interval = 1200;
+                var rowHeight = 40;
+                var curIndex=0;
+                function  playScroll() {
+                    for(var i=0;i<uls.length;i++){
+                        if(i<curIndex){
+                            uls.eq(i).stop(true).animate({top:(i-curIndex-1+uls.length)*rowHeight+'px'});
+                        }else if(i>curIndex){
+                            uls.eq(i).stop(true).animate({top:(i-curIndex-1)*rowHeight+'px'});
+                        }else{
+                            uls.eq(i).stop(true).animate({top: -rowHeight},function(){
+                                $(this).css({top:(uls.length-1)*rowHeight+'px'});
+                            });
+                        }
+                    }
+                    if(curIndex==uls.length-1){
+                        curIndex=0
+                    }else{
+                        curIndex++
+                    }
+                }
+                timer = setInterval(playScroll,interval);
+                $('.'+className).mouseenter(function () {
+                    clearInterval(timer);
+                }).mouseleave(function () {
+                    timer = setInterval(playScroll,interval);
+                });
+            }
+            scroll('scrollBody')
+        </script>
+    </body>
+</html>
